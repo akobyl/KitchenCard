@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
 
     steps:
       - name: Checkout repository
@@ -43,29 +44,194 @@ jobs:
         run: |
           pip install -r scripts/requirements.txt
 
-      - name: Run scraper
+      - name: Get current data stats
+        id: before-stats
         run: |
-          if [ "${{ github.event.inputs.merge }}" == "true" ]; then
-            python scripts/scraper.py --county ${{ github.event.inputs.county || 'all' }} --merge
+          if [ -f data/inspections.json ]; then
+            BEFORE_COUNT=$(jq '.restaurants | length' data/inspections.json)
+            echo "count=$BEFORE_COUNT" >> $GITHUB_OUTPUT
+            echo "📊 Current database: $BEFORE_COUNT restaurants"
           else
-            python scripts/scraper.py --county ${{ github.event.inputs.county || 'all' }}
+            echo "count=0" >> $GITHUB_OUTPUT
+            echo "📊 No existing data found"
+          fi
+
+      - name: Run scraper
+        id: scraper
+        run: |
+          echo "🚀 Starting scraper for ${{ github.event.inputs.county || 'all' }} county..."
+          COUNTY="${{ github.event.inputs.county || 'all' }}"
+          MERGE="${{ github.event.inputs.merge }}"
+
+          if [ "$MERGE" == "true" ]; then
+            python scripts/scraper.py --county "$COUNTY" --merge 2>&1 | tee scraper.log
+          else
+            python scripts/scraper.py --county "$COUNTY" 2>&1 | tee scraper.log
+          fi
+
+          EXIT_CODE=$?
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "✅ Scraper completed successfully"
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "❌ Scraper failed with exit code $EXIT_CODE"
+            exit $EXIT_CODE
+          fi
+
+      - name: Validate JSON output
+        if: steps.scraper.outputs.status == 'success'
+        run: |
+          echo "🔍 Validating JSON output..."
+          if ! jq empty data/inspections.json 2>/dev/null; then
+            echo "❌ Invalid JSON in data/inspections.json"
+            exit 1
+          fi
+
+          # Check required fields
+          if ! jq -e '.restaurants' data/inspections.json > /dev/null; then
+            echo "❌ Missing 'restaurants' field"
+            exit 1
+          fi
+
+          if ! jq -e '.lastUpdated' data/inspections.json > /dev/null; then
+            echo "❌ Missing 'lastUpdated' field"
+            exit 1
+          fi
+
+          echo "✅ JSON validation passed"
+
+      - name: Get updated data stats
+        id: after-stats
+        if: steps.scraper.outputs.status == 'success'
+        run: |
+          AFTER_COUNT=$(jq '.restaurants | length' data/inspections.json)
+          BEFORE_COUNT=${{ steps.before-stats.outputs.count }}
+          DIFF=$((AFTER_COUNT - BEFORE_COUNT))
+
+          echo "count=$AFTER_COUNT" >> $GITHUB_OUTPUT
+          echo "diff=$DIFF" >> $GITHUB_OUTPUT
+
+          echo "📊 Updated database: $AFTER_COUNT restaurants"
+          if [ $DIFF -gt 0 ]; then
+            echo "📈 Added $DIFF restaurants"
+          elif [ $DIFF -lt 0 ]; then
+            echo "📉 Removed ${DIFF#-} restaurants"
+          else
+            echo "➡️  No change in restaurant count"
           fi
 
       - name: Check for changes
         id: git-check
+        if: steps.scraper.outputs.status == 'success'
         run: |
-          git diff --exit-code data/inspections.json || echo "changed=true" >> $GITHUB_OUTPUT
+          if git diff --quiet data/inspections.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected in inspection data"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Changes detected in inspection data"
+          fi
 
       - name: Commit and push changes
-        if: steps.git-check.outputs.changed == 'true'
+        if: steps.scraper.outputs.status == 'success' && steps.git-check.outputs.changed == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/inspections.json
-          git commit -m "chore: update inspection data for ${{ github.event.inputs.county || 'all' }} county"
+
+          COUNTY="${{ github.event.inputs.county || 'all' }}"
+          DIFF="${{ steps.after-stats.outputs.diff }}"
+
+          if [ "$DIFF" != "0" ]; then
+            git commit -m "chore: update inspection data for $COUNTY county
+
+- Total restaurants: ${{ steps.after-stats.outputs.count }}
+- Change: $DIFF restaurants
+- Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          else
+            git commit -m "chore: update inspection data for $COUNTY county
+
+- Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          fi
+
           git push
 
-      - name: No changes detected
-        if: steps.git-check.outputs.changed != 'true'
+      - name: Generate job summary
+        if: always()
         run: |
-          echo "ℹ️ No changes detected in inspection data"
+          echo "# 🍽️ Restaurant Inspection Data Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.scraper.outputs.status }}" == "success" ]; then
+            echo "## ✅ Status: Success" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Status: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **County**: \`${{ github.event.inputs.county || 'all' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Merge Mode**: \`${{ github.event.inputs.merge }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered By**: @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.scraper.outputs.status }}" == "success" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Statistics" >> $GITHUB_STEP_SUMMARY
+            echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Before | ${{ steps.before-stats.outputs.count }} restaurants |" >> $GITHUB_STEP_SUMMARY
+            echo "| After | ${{ steps.after-stats.outputs.count }} restaurants |" >> $GITHUB_STEP_SUMMARY
+            echo "| Change | ${{ steps.after-stats.outputs.diff }} |" >> $GITHUB_STEP_SUMMARY
+
+            if [ "${{ steps.git-check.outputs.changed }}" == "true" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### 🎉 Changes committed and pushed!" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### ℹ️ No changes to commit" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+      - name: Upload scraper logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs-${{ github.run_number }}
+          path: scraper.log
+          retention-days: 30
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const county = '${{ github.event.inputs.county || 'all' }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Scraper Failed] ${county} county data update failed`,
+              body: `## 🚨 Scraper Failure Report
+
+**County**: ${county}
+**Run**: [#${context.runNumber}](${runUrl})
+**Triggered by**: @${context.actor}
+**Timestamp**: ${new Date().toISOString()}
+
+### Details
+The restaurant inspection data scraper failed during execution. Please review the workflow logs for details.
+
+### Next Steps
+1. Check the [workflow run logs](${runUrl}) for error messages
+2. Review the scraper logs artifact
+3. Verify data source availability
+4. Check for API rate limits or access issues
+
+---
+*This issue was automatically created by GitHub Actions.*`,
+              labels: ['bug', 'scraper', 'automation']
+            });
