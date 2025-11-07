@@ -145,26 +145,90 @@ python scripts/scraper.py --all --merge
 3. Set up geocoding (see section below)
 4. Refine cuisine classification logic
 
-### Option 3: GitHub Actions (Automated)
+### Option 3: GitHub Actions (Automated) ⭐
 
-The repository includes a GitHub Actions workflow for automated data updates.
+The repository includes a comprehensive GitHub Actions workflow with automatic error handling, logging, and notifications.
+
+📖 **[View detailed GitHub Actions guide →](docs/github-actions-guide.md)**
+
+#### Features
+
+- ✅ **Manual trigger** with configurable options
+- ✅ **Automatic validation** of JSON output
+- ✅ **Statistics tracking** (before/after comparison)
+- ✅ **Job summaries** with detailed metrics
+- ✅ **Log artifacts** retained for 30 days
+- ✅ **Auto-create issues** on failure
+- ✅ **Smart commits** with change statistics
+- ✅ **Scheduled runs** (optional)
 
 #### Manual Trigger
 
-1. Go to **Actions** tab in GitHub
-2. Select **Update Restaurant Inspection Data**
-3. Click **Run workflow**
-4. Choose county and merge options
-5. Click **Run workflow**
+1. Go to **Actions** tab in your GitHub repository
+2. Select **"Update Restaurant Inspection Data"** workflow
+3. Click **"Run workflow"** button
+4. Configure options:
+   - **County**: Choose `all`, `summit`, or `cuyahoga`
+   - **Merge Mode**: Enable to merge with existing data (recommended)
+5. Click **"Run workflow"**
+
+The workflow will:
+1. ✅ Check out the code
+2. ✅ Set up Python and install dependencies
+3. ✅ Record current data statistics
+4. ✅ Run the scraper with your selected options
+5. ✅ Validate the JSON output
+6. ✅ Compare before/after statistics
+7. ✅ Commit and push changes (if any)
+8. ✅ Generate a detailed job summary
+9. ✅ Upload logs as artifacts
+10. ❌ Create an issue if the scraper fails
+
+#### View Results
+
+After the workflow runs:
+
+- **Summary**: Check the workflow run page for a detailed summary with:
+  - Success/failure status
+  - Configuration used
+  - Statistics table (before, after, change)
+  - Commit status
+
+- **Logs**: Download scraper logs from the "Artifacts" section (retained 30 days)
+
+- **Commits**: Look for commits like:
+  ```
+  chore: update inspection data for all county
+
+  - Total restaurants: 125
+  - Change: +12 restaurants
+  - Updated: 2025-11-07 14:30:00 UTC
+  ```
+
+#### Automatic Issue Creation
+
+If the scraper fails, the workflow automatically creates a GitHub issue with:
+- County that failed
+- Link to failed workflow run
+- Who triggered it
+- Timestamp
+- Troubleshooting checklist
+
+Labels: `bug`, `scraper`, `automation`
 
 #### Scheduled Updates (Optional)
 
-Uncomment the `schedule` section in `.github/workflows/update-data.yml`:
+To enable automatic weekly updates, uncomment the `schedule` section in `.github/workflows/update-data.yml`:
 
 ```yaml
 schedule:
   - cron: '0 2 * * 0'  # Every Sunday at 2 AM UTC
 ```
+
+**Recommended schedules:**
+- Weekly: `'0 2 * * 0'` (Sundays at 2 AM UTC)
+- Daily: `'0 2 * * *'` (Every day at 2 AM UTC)
+- Monthly: `'0 2 1 * *'` (1st of each month at 2 AM UTC)
 
 ## Data Sources
 
