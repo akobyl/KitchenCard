@@ -1,0 +1,385 @@
+{
+  "lastUpdated": "2025-11-07T00:00:00Z",
+  "restaurants": [
+    {
+      "id": "summit-001",
+      "name": "Luigi's Italian Restaurant",
+      "address": "123 Main St, Akron, OH 44308",
+      "lat": 41.0814,
+      "lng": -81.5190,
+      "county": "Summit",
+      "cuisine": "Italian",
+      "inspections": [
+        {
+          "date": "2025-10-15T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Food not held at proper temperature (48°F observed in walk-in cooler)",
+              "critical": true
+            },
+            {
+              "description": "Missing date labels on prepared food items",
+              "critical": false
+            }
+          ]
+        },
+        {
+          "date": "2025-04-20T00:00:00Z",
+          "critical_violations": 0,
+          "violations": [
+            {
+              "description": "Floor tiles cracked in storage area",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summit-002",
+      "name": "Golden Dragon Chinese Cuisine",
+      "address": "456 Market Ave, Akron, OH 44304",
+      "lat": 41.0858,
+      "lng": -81.5212,
+      "county": "Summit",
+      "cuisine": "Chinese",
+      "inspections": [
+        {
+          "date": "2025-09-28T00:00:00Z",
+          "critical_violations": 3,
+          "violations": [
+            {
+              "description": "Raw chicken stored above ready-to-eat vegetables",
+              "critical": true
+            },
+            {
+              "description": "Hand sink blocked by storage containers",
+              "critical": true
+            },
+            {
+              "description": "Employee handled food without washing hands after handling raw meat",
+              "critical": true
+            },
+            {
+              "description": "Ceiling vent requires cleaning",
+              "critical": false
+            }
+          ]
+        },
+        {
+          "date": "2025-03-12T00:00:00Z",
+          "critical_violations": 2,
+          "violations": [
+            {
+              "description": "Food held at unsafe temperature (55°F)",
+              "critical": true
+            },
+            {
+              "description": "No thermometer in refrigeration unit",
+              "critical": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summit-003",
+      "name": "Summit Diner",
+      "address": "789 West Ave, Cuyahoga Falls, OH 44221",
+      "lat": 41.1339,
+      "lng": -81.4846,
+      "county": "Summit",
+      "cuisine": "American",
+      "inspections": [
+        {
+          "date": "2025-11-01T00:00:00Z",
+          "critical_violations": 0,
+          "violations": []
+        },
+        {
+          "date": "2025-05-15T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Reach-in cooler not maintaining proper temperature",
+              "critical": true
+            },
+            {
+              "description": "Floors require deep cleaning behind equipment",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cuyahoga-001",
+      "name": "Cleveland Steakhouse",
+      "address": "321 Euclid Ave, Cleveland, OH 44115",
+      "lat": 41.5017,
+      "lng": -81.6892,
+      "county": "Cuyahoga",
+      "cuisine": "American",
+      "inspections": [
+        {
+          "date": "2025-10-22T00:00:00Z",
+          "critical_violations": 2,
+          "violations": [
+            {
+              "description": "Cooked steaks held at 120°F (must be 135°F or above)",
+              "critical": true
+            },
+            {
+              "description": "Sanitizer solution too weak (50 ppm, requires 100-200 ppm)",
+              "critical": true
+            },
+            {
+              "description": "Walk-in freezer door seal damaged",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cuyahoga-002",
+      "name": "Tokyo Sushi Bar",
+      "address": "555 Superior Ave, Cleveland, OH 44114",
+      "lat": 41.4995,
+      "lng": -81.6954,
+      "county": "Cuyahoga",
+      "cuisine": "Japanese",
+      "inspections": [
+        {
+          "date": "2025-10-30T00:00:00Z",
+          "critical_violations": 0,
+          "violations": [
+            {
+              "description": "Light bulb out in storage area",
+              "critical": false
+            }
+          ]
+        },
+        {
+          "date": "2025-04-18T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Raw fish not date-marked properly",
+              "critical": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cuyahoga-003",
+      "name": "Maria's Mexican Cantina",
+      "address": "888 Detroit Ave, Lakewood, OH 44107",
+      "lat": 41.4822,
+      "lng": -81.7976,
+      "county": "Cuyahoga",
+      "cuisine": "Mexican",
+      "inspections": [
+        {
+          "date": "2025-09-10T00:00:00Z",
+          "critical_violations": 4,
+          "violations": [
+            {
+              "description": "Salsa and guacamole held at room temperature for over 4 hours",
+              "critical": true
+            },
+            {
+              "description": "Employee touched ready-to-eat food with bare hands",
+              "critical": true
+            },
+            {
+              "description": "No certified food manager on duty",
+              "critical": true
+            },
+            {
+              "description": "Cutting boards heavily scarred and stained",
+              "critical": true
+            },
+            {
+              "description": "Mop sink used for food preparation equipment",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summit-004",
+      "name": "Thai Orchid",
+      "address": "234 South Main St, Hudson, OH 44236",
+      "lat": 41.2401,
+      "lng": -81.4407,
+      "county": "Summit",
+      "cuisine": "Thai",
+      "inspections": [
+        {
+          "date": "2025-10-05T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Rice held at improper temperature (110°F)",
+              "critical": true
+            }
+          ]
+        },
+        {
+          "date": "2025-03-28T00:00:00Z",
+          "critical_violations": 0,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "cuyahoga-004",
+      "name": "Pete's Pizza Palace",
+      "address": "777 Broadway Ave, Bedford, OH 44146",
+      "lat": 41.3931,
+      "lng": -81.5365,
+      "county": "Cuyahoga",
+      "cuisine": "Italian",
+      "inspections": [
+        {
+          "date": "2025-10-18T00:00:00Z",
+          "critical_violations": 0,
+          "violations": [
+            {
+              "description": "Minor grease buildup on oven hood",
+              "critical": false
+            }
+          ]
+        },
+        {
+          "date": "2025-05-02T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Pizza toppings not covered in refrigerator",
+              "critical": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summit-005",
+      "name": "Burger Barn",
+      "address": "999 Portage Path, Barberton, OH 44203",
+      "lat": 41.0129,
+      "lng": -81.6051,
+      "county": "Summit",
+      "cuisine": "American",
+      "inspections": [
+        {
+          "date": "2025-09-15T00:00:00Z",
+          "critical_violations": 2,
+          "violations": [
+            {
+              "description": "Ground beef stored at 45°F (must be 41°F or below)",
+              "critical": true
+            },
+            {
+              "description": "Employee without hair restraint",
+              "critical": true
+            },
+            {
+              "description": "Dishwasher not reaching proper temperature",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cuyahoga-005",
+      "name": "Cafe Paris",
+      "address": "444 Chagrin Blvd, Shaker Heights, OH 44122",
+      "lat": 41.4737,
+      "lng": -81.5521,
+      "county": "Cuyahoga",
+      "cuisine": "French",
+      "inspections": [
+        {
+          "date": "2025-10-25T00:00:00Z",
+          "critical_violations": 0,
+          "violations": []
+        },
+        {
+          "date": "2025-04-30T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Hollandaise sauce held without temperature control",
+              "critical": true
+            },
+            {
+              "description": "Refrigerator gasket torn and needs replacement",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summit-006",
+      "name": "India Palace",
+      "address": "665 West Market St, Akron, OH 44303",
+      "lat": 41.0806,
+      "lng": -81.5298,
+      "county": "Summit",
+      "cuisine": "Indian",
+      "inspections": [
+        {
+          "date": "2025-08-20T00:00:00Z",
+          "critical_violations": 1,
+          "violations": [
+            {
+              "description": "Buffet items not at proper hot holding temperature",
+              "critical": true
+            },
+            {
+              "description": "Naan oven area requires cleaning",
+              "critical": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cuyahoga-006",
+      "name": "Mediterranean Grill",
+      "address": "123 Cedar Rd, Cleveland Heights, OH 44106",
+      "lat": 41.5048,
+      "lng": -81.6065,
+      "county": "Cuyahoga",
+      "cuisine": "Mediterranean",
+      "inspections": [
+        {
+          "date": "2025-11-03T00:00:00Z",
+          "critical_violations": 0,
+          "violations": []
+        },
+        {
+          "date": "2025-06-12T00:00:00Z",
+          "critical_violations": 2,
+          "violations": [
+            {
+              "description": "Hummus and tzatziki not date-labeled",
+              "critical": true
+            },
+            {
+              "description": "Falafel batter stored at unsafe temperature",
+              "critical": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
