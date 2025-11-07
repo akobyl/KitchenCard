@@ -119,16 +119,52 @@ class HealthInspectionScraper:
 
     def scrape_cuyahoga_county(self):
         """
-        Scrape restaurant inspection data from Cuyahoga County Health Department.
+        Scrape restaurant inspection data from Cuyahoga County Board of Health.
 
-        NOTE: The user needs to provide the Cuyahoga County data source URL.
-        Once provided, implement similar logic to Summit County scraper.
+        Cuyahoga County Source: https://inspections.myhealthdepartment.com/ccbh
+
+        NOTE: This site may require Selenium for JavaScript-rendered content.
+        The site has bot protection (403 errors with simple requests), so you'll need to:
+        1. Use Selenium with a proper user agent
+        2. Handle dynamic content loading
+        3. Implement proper delays between requests
+        4. Consider using browser automation (headless Chrome/Firefox)
         """
         print("🔍 Scraping Cuyahoga County data...")
-        print("⚠️  Cuyahoga County data source not yet specified.")
-        print("   Please provide the URL/API for Cuyahoga County health inspections.")
+        print("⚠️  This is a template implementation. Customize based on site structure.")
 
-        # TODO: Implement Cuyahoga County scraping once source is known
+        base_url = "https://inspections.myhealthdepartment.com/ccbh"
+
+        # TODO: Implement actual scraping logic
+        # The site likely requires JavaScript rendering, so consider using Selenium:
+        #
+        # from selenium import webdriver
+        # from selenium.webdriver.common.by import By
+        # from selenium.webdriver.support.ui import WebDriverWait
+        # from selenium.webdriver.support import expected_conditions as EC
+        #
+        # options = webdriver.ChromeOptions()
+        # options.add_argument('--headless')
+        # driver = webdriver.Chrome(options=options)
+        #
+        # driver.get(base_url)
+        # # Wait for content to load
+        # WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.CLASS_NAME, "restaurant-list"))
+        # )
+        #
+        # # Extract restaurant data
+        # restaurants = driver.find_elements(By.CLASS_NAME, "restaurant-item")
+        # for restaurant in restaurants:
+        #     # Extract data and parse...
+        #     pass
+        #
+        # driver.quit()
+
+        print("   Site URL: https://inspections.myhealthdepartment.com/ccbh")
+        print("   Note: Site has bot protection - use Selenium or browser automation")
+
+        time.sleep(1)  # Be respectful of the server
 
         print("✅ Cuyahoga County scraping complete (template)")
 
@@ -270,14 +306,18 @@ def main():
     print("=" * 60)
     print("1. This is a TEMPLATE scraper. You need to implement:")
     print("   - Actual web scraping logic for Summit County")
-    print("   - Data source identification for Cuyahoga County")
+    print("     URL: https://www.healthspace.com/clients/Ohio/Summit/Summit_Web_Live.nsf")
+    print("   - Actual web scraping logic for Cuyahoga County")
+    print("     URL: https://inspections.myhealthdepartment.com/ccbh")
+    print("     NOTE: Requires Selenium due to JavaScript and bot protection")
     print("   - Geocoding implementation (or pre-geocode addresses)")
     print("   - Cuisine classification (manual or improved heuristics)")
     print()
     print("2. Before running on production:")
     print("   - Check robots.txt for both county websites")
     print("   - Implement rate limiting and respectful scraping")
-    print("   - Consider using Selenium for JavaScript-heavy sites")
+    print("   - Use Selenium for Cuyahoga County (JavaScript-rendered)")
+    print("   - Add proper user agents and headers to avoid bot detection")
     print("   - Test thoroughly with small data samples first")
     print()
     print("3. Geocoding recommendations:")

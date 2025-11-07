@@ -4,6 +4,7 @@ beautifulsoup4>=4.12.0
 geopy>=2.4.0
 lxml>=4.9.0
 
-# Optional: For JavaScript-heavy sites
+# Required for Cuyahoga County (JavaScript-rendered site with bot protection)
+# Uncomment these when implementing Cuyahoga County scraper:
 # selenium>=4.15.0
 # webdriver-manager>=4.0.0

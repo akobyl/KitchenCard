@@ -117,6 +117,8 @@ The `data/inspections.json` file follows this schema:
 
 The project includes a Python scraper template for automating data collection.
 
+📖 **[View detailed Scraper Implementation Guide →](docs/scraper-implementation-guide.md)**
+
 #### Setup
 
 ```bash
@@ -238,9 +240,10 @@ schedule:
 - **Method**: Web scraping required (navigate by city → restaurant)
 
 ### Cuyahoga County
-- **Source**: TBD - Please provide URL or API endpoint
-- **Access**: TBD
-- **Method**: TBD
+- **Source**: [Cuyahoga County Board of Health](https://inspections.myhealthdepartment.com/ccbh)
+- **Access**: Public web interface
+- **Method**: Web scraping required (may require Selenium for JavaScript rendering)
+- **Note**: Site may have bot protection (403 errors) - use browser automation or respectful request headers
 
 ## Geocoding Addresses
 
