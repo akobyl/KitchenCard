@@ -145,15 +145,21 @@ jobs:
           DIFF="${{ steps.after-stats.outputs.diff }}"
 
           if [ "$DIFF" != "0" ]; then
-            git commit -m "chore: update inspection data for $COUNTY county
+            git commit -m "$(cat <<EOF
+          chore: update inspection data for $COUNTY county
 
-- Total restaurants: ${{ steps.after-stats.outputs.count }}
-- Change: $DIFF restaurants
-- Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          - Total restaurants: ${{ steps.after-stats.outputs.count }}
+          - Change: $DIFF restaurants
+          - Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          EOF
+          )"
           else
-            git commit -m "chore: update inspection data for $COUNTY county
+            git commit -m "$(cat <<EOF
+          chore: update inspection data for $COUNTY county
 
-- Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          - Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          EOF
+          )"
           fi
 
           git push
